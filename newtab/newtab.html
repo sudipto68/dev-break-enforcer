@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New Tab</title>
+  <link rel="stylesheet" href="newtab.css" />
+</head>
+<body>
+
+  <!-- Shown when browser is locked -->
+  <div id="view-locked" class="view" hidden>
+    <iframe id="break-iframe" src="../overlay/overlay.html"></iframe>
+  </div>
+
+  <!-- Shown when browser is working -->
+  <div id="view-dashboard" class="view" hidden>
+    <div class="dashboard">
+      <header class="dash-header">
+        <span class="brand">Dev Break Enforcer</span>
+        <a href="../options/options.html" class="settings-link">Settings →</a>
+      </header>
+
+      <div class="next-break-card">
+        <div class="next-label">// next_break_in</div>
+        <div id="next-break-timer" class="next-timer">—:——</div>
+        <div id="next-break-sub" class="next-sub"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-completed">—</div>
+          <div class="stat-label">breaks today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-snoozed">—</div>
+          <div class="stat-label">snoozed today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value streak" id="stat-streak">—</div>
+          <div class="stat-label">day streak</div>
+        </div>
+      </div>
+
+      <div id="pause-bar" class="pause-bar">
+        <button id="btn-pause" class="btn-pause">Pause session</button>
+        <span class="pause-hint">Pausing stops the break timer until you resume.</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="newtab.js"></script>
+</body>
+</html>

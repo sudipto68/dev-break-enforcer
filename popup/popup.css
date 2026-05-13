@@ -1,0 +1,65 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 280px;
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 13px;
+}
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #21262d;
+}
+.brand { font-size: 12px; font-weight: 600; color: #8b949e; letter-spacing: 0.04em; }
+
+.badge {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.badge.working  { background: #1a3a2a; color: #3fb950; }
+.badge.locked   { background: #3a1a1a; color: #f85149; }
+.badge.delayed  { background: #3a2a10; color: #f0883e; }
+.badge.paused   { background: #1e2128; color: #6e7681; }
+
+.view { padding: 16px; }
+
+.next-break-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #161b22; border: 1px solid #21262d; border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 12px;
+}
+.next-label { font-size: 11px; color: #6e7681; }
+.next-timer  { font-size: 18px; font-weight: 700; color: #58a6ff; }
+.next-timer.paused { color: #484f58; }
+
+.stats {
+  display: flex; align-items: center;
+  background: #161b22; border: 1px solid #21262d; border-radius: 8px;
+  padding: 12px 0; margin-bottom: 12px;
+}
+.stat { flex: 1; text-align: center; }
+.stat-val  { font-size: 20px; font-weight: 700; color: #e6edf3; }
+.stat-val.streak { color: #f0883e; }
+.stat-lbl  { font-size: 10px; color: #6e7681; margin-top: 2px; }
+.stat-divider { width: 1px; height: 32px; background: #21262d; }
+
+.actions { display: flex; gap: 8px; }
+
+.btn-primary, .btn-secondary {
+  flex: 1; padding: 9px 12px;
+  border: none; border-radius: 6px;
+  font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+  text-align: center; text-decoration: none; display: inline-block;
+  transition: all 0.15s;
+}
+.btn-primary  { background: #238636; color: #fff; }
+.btn-primary:hover  { background: #2ea043; }
+.btn-secondary { background: #21262d; color: #8b949e; border: 1px solid #30363d; }
+.btn-secondary:hover { border-color: #58a6ff; color: #58a6ff; }
+.link-btn { display: flex; align-items: center; justify-content: center; }
+
+.locked-msg { font-size: 13px; font-weight: 600; color: #f85149; margin-bottom: 4px; }
+.locked-sub { font-size: 12px; color: #6e7681; margin-bottom: 14px; }

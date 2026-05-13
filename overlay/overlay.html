@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Break Time</title>
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body>
+<div class="card">
+
+  <!-- Phase 1: Locked — waiting for user to start timer -->
+  <div id="phase-locked" class="phase active">
+    <p class="comment">// break_enforcer.lock()</p>
+    <h1 class="headline">Time to step away.</h1>
+    <p class="sub">Your code will still be here in 60 seconds.</p>
+
+    <ul class="tasks">
+      <li class="task-item disabled">
+        <span class="task-icon">🚶</span>
+        <span class="task-label">Walk away from your screen for 1 minute</span>
+      </li>
+      <li class="task-item disabled">
+        <span class="task-icon">💧</span>
+        <span class="task-label">Drink a glass of water</span>
+      </li>
+    </ul>
+
+    <button id="btn-start" class="btn-primary">Start Break Timer</button>
+    <button id="btn-snooze" class="btn-snooze">Snooze 10 min (1 remaining)</button>
+  </div>
+
+  <!-- Phase 2: Break timer running -->
+  <div id="phase-timer" class="phase">
+    <p class="comment">// timer.start(60)</p>
+    <div class="countdown-ring">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle class="track" cx="60" cy="60" r="52" />
+        <circle id="progress-ring" class="progress" cx="60" cy="60" r="52" />
+      </svg>
+      <div class="countdown-text" id="countdown-display">1:00</div>
+    </div>
+
+    <ul class="tasks">
+      <li class="task-item disabled">
+        <span class="task-icon">🚶</span>
+        <span class="task-label">Walk away from your screen</span>
+      </li>
+      <li class="task-item disabled">
+        <span class="task-icon">💧</span>
+        <span class="task-label">Drink a glass of water</span>
+      </li>
+    </ul>
+
+    <button class="btn-primary" disabled>Waiting for you to return…</button>
+  </div>
+
+  <!-- Phase 3: Confirm tasks done -->
+  <div id="phase-confirm" class="phase">
+    <p class="comment">// confirm_tasks_completed()</p>
+    <h1 class="headline">Did you do it?</h1>
+    <p class="sub">Tick both to unlock your browser.</p>
+
+    <ul class="tasks" id="confirm-tasks">
+      <li class="task-item enabled" id="task-walk" data-task="walk">
+        <div class="task-checkbox">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="task-icon">🚶</span>
+        <span class="task-label">I walked for 1 minute</span>
+      </li>
+      <li class="task-item enabled" id="task-water" data-task="water">
+        <div class="task-checkbox">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+            <path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="task-icon">💧</span>
+        <span class="task-label">I drank a glass of water</span>
+      </li>
+    </ul>
+
+    <button id="btn-unlock" class="btn-primary" disabled>Unlock Browser</button>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span id="status-label">Browser locked — take a break</span>
+  </div>
+</div>
+
+<script src="overlay.js"></script>
+</body>
+</html>

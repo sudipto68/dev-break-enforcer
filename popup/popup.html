@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dev Break Enforcer</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <span class="brand">Dev Break Enforcer</span>
+    <span id="status-badge" class="badge working">working</span>
+  </header>
+
+  <div id="view-working" class="view">
+    <div class="next-break-row">
+      <span class="next-label">// next_break_in</span>
+      <span id="next-timer" class="next-timer">—:——</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div id="stat-completed" class="stat-val">—</div>
+        <div class="stat-lbl">completed</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div id="stat-snoozed" class="stat-val">—</div>
+        <div class="stat-lbl">snoozed</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div id="stat-streak" class="stat-val streak">—</div>
+        <div class="stat-lbl">streak</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="btn-pause" class="btn-secondary">Pause</button>
+      <a href="../options/options.html" target="_blank" class="btn-secondary link-btn">Settings</a>
+    </div>
+  </div>
+
+  <div id="view-locked" class="view" hidden>
+    <p class="locked-msg">// Browser is locked</p>
+    <p class="locked-sub">Complete your break tasks to unlock.</p>
+    <a href="../overlay/overlay.html" target="_blank" class="btn-primary link-btn">Open Break Screen</a>
+  </div>
+
+  <div id="view-paused" class="view" hidden>
+    <p class="locked-msg">// Session paused</p>
+    <p class="locked-sub">Break timer is off until you resume.</p>
+    <button id="btn-resume" class="btn-primary">Resume Session</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
