@@ -51,6 +51,12 @@ body {
   font-size: 36px; font-weight: 700; color: #58a6ff;
   letter-spacing: 0.02em; line-height: 1; margin-bottom: 12px;
 }
+.timer-value.dimmed { color: #6e7681; font-size: 20px; padding-top: 6px; }
+.delay-note {
+  font-size: 11px; color: #f0883e; margin-top: 10px; line-height: 1.5;
+  padding-top: 10px; border-top: 1px solid #21262d;
+}
+
 .timer-track {
   height: 3px; background: #21262d; border-radius: 3px; overflow: hidden;
 }

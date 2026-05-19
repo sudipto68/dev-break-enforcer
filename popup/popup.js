@@ -39,6 +39,14 @@ let timerInterval = null;
   if (state?.status === 'delayed') {
     badge.className   = 'badge delayed';
     badge.textContent = 'Call detected';
+    timer.textContent = 'Call in progress';
+    timer.classList.add('dimmed');
+    fill.style.width  = '0%';
+
+    const note = document.createElement('p');
+    note.className = 'delay-note';
+    note.textContent = 'Break paused — active video call detected. Will retry automatically.';
+    timer.closest('.timer-card').appendChild(note);
   }
 
   if (state?.nextBreakAt) {

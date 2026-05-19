@@ -1,8 +1,22 @@
 # Dev Break Enforcer
 
-A Chrome extension that **locks your entire browser** every hour and forces you to walk for a minute and drink water before you can continue working. Unlike every other break reminder tool, it cannot be dismissed — only completed.
+> A Chrome extension that enforces real breaks — locks every tab until you step away, walk for a minute, and drink water.
 
-Built for software engineers who ignore notifications.
+---
+
+## Why I built this
+
+I'm a software engineer and I used to spend 8–10 hours a day staring at a screen without moving. Not because I didn't know it was bad — I knew. I had tried every break reminder app out there. They all sent a notification. I dismissed it in half a second and kept coding.
+
+The problem isn't awareness. The problem is that every existing tool gives you an easy way out.
+
+So I built something that doesn't. When the timer hits zero, your entire browser locks. Every tab. You can't close the overlay, you can't switch tabs, you can't do anything — until you start a 1-minute countdown, step away from your screen, drink some water, and come back to tick two checkboxes confirming you actually did it.
+
+It sounds aggressive. It is. And it's the only thing that's actually worked for me.
+
+After a few weeks of using it, I stopped getting the 3pm headaches. My eyes stopped feeling dry by evening. I started actually drinking enough water. Small things — but they add up over a career spent in front of a screen.
+
+If you're a developer who ignores every notification that isn't a prod alert, this was built for you.
 
 ---
 
@@ -13,7 +27,7 @@ Built for software engineers who ignore notifications.
 - 1-minute countdown timer — checkboxes only unlock when the timer hits zero
 - Detects active **Google Meet**, **Zoom**, **Teams**, and other video calls — delays the break automatically
 - **Snooze** option (limited per session, configurable)
-- **5-minute warning** notification before the lock kicks in
+- **5-minute warning** toast on your current tab before the lock kicks in
 - Tracks daily break history and a **streak** across sessions
 - Pause/resume the timer from the popup
 - Fully configurable via a settings page
@@ -22,20 +36,35 @@ Built for software engineers who ignore notifications.
 
 ## Installation
 
-This extension is not published to the Chrome Web Store. Load it manually as an unpacked extension.
+This extension is not on the Chrome Web Store. You install it directly from the code — takes about 2 minutes.
 
-**Requirements:** Google Chrome (or any Chromium-based browser)
+**Requirements:** Google Chrome or any Chromium-based browser (Edge, Brave, Arc)
 
-**Steps:**
+### Step 1 — Get the code
 
-1. Download or clone this repository to your machine
-2. Open Chrome and navigate to `chrome://extensions`
-3. Enable **Developer mode** using the toggle in the top-right corner
-4. Click **Load unpacked**
-5. Select the `break-enforcer` folder
-6. The extension icon (B) appears in your toolbar — pin it for easy access
+**Option A — with Git:**
+```bash
+git clone https://github.com/your-username/break-enforcer.git
+```
 
-**After any code change**, go back to `chrome://extensions` and click the **↺ reload** button on the extension card. No need to remove and re-add.
+**Option B — download ZIP:**
+- Click the green **Code** button on this GitHub page
+- Select **Download ZIP**
+- Extract it anywhere on your machine (e.g. your Desktop)
+
+### Step 2 — Load it in Chrome
+
+1. Open Chrome and go to `chrome://extensions`
+2. Turn on **Developer mode** using the toggle in the top-right corner
+3. Click **Load unpacked**
+4. Select the `break-enforcer` folder — the one that contains `manifest.json`
+5. The extension icon appears in your toolbar. Click the puzzle piece 🧩 icon and pin it for easy access
+
+### Step 3 — You're done
+
+The 60-minute timer starts immediately. No setup needed.
+
+> **After pulling any code updates**, go back to `chrome://extensions` and click the **↺ reload** button on the extension card. No need to remove and re-add it.
 
 ---
 
@@ -70,7 +99,7 @@ Right-click the extension icon → **Options**, or open `chrome://extensions` �
 | Break timer duration | 1 min | Length of the countdown on the break screen |
 | Snooze limit | 1 per session | How many times you can snooze before breaks are mandatory |
 | Snooze delay | 10 min | Minutes added when you snooze |
-| 5-minute warning | On | Chrome notification before the lock fires |
+| 5-minute warning | On | In-page toast before the lock fires |
 | Video call domains | See below | Domains that trigger automatic break delay |
 
 **Video call detection:** If any tab matches a domain in the list, the break is delayed by the snooze duration and retried. Default domains: `meet.google.com`, `zoom.us`, `teams.microsoft.com`, `whereby.com`, `webex.com`. Subdomain matching is supported — `us06web.zoom.us` is caught by the `zoom.us` rule. You can add or remove domains from the settings page.
@@ -96,10 +125,6 @@ break-enforcer/
 │   ├── overlay.html            The break screen UI
 │   ├── overlay.css             Break screen styles
 │   └── overlay.js              Break screen logic (countdown, checkboxes, confirm)
-├── newtab/
-│   ├── newtab.html             Dashboard shown on new tab when working
-│   ├── newtab.css
-│   └── newtab.js
 ├── popup/
 │   ├── popup.html              Extension icon popup
 │   ├── popup.css
@@ -190,7 +215,6 @@ A day counts toward the streak if it has at least one completed break and no mor
 | `alarms` | Persistent break timer that survives service worker sleep |
 | `storage` | Save settings, state, and break history |
 | `tabs` | Query open tabs to inject the overlay and detect video calls |
-| `notifications` | 5-minute warning before the browser locks |
 | `scripting` | Force-inject the overlay into tabs opened before the extension loaded |
 | `<all_urls>` | Inject the content script into any tab the user is browsing |
 

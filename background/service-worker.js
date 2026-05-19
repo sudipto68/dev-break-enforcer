@@ -69,11 +69,12 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     const { state } = await chrome.storage.local.get('state');
     if (state.paused) return;
 
-    const onCall = await isOnVideoCall();
-    if (onCall) {
+    const callDomain = await getActiveCallDomain();
+    if (callDomain) {
       const { settings } = await chrome.storage.local.get('settings');
       await setState({ status: 'delayed' });
       chrome.alarms.create('break', { delayInMinutes: settings.snoozeDuration });
+      await notifyCallDelay(callDomain, settings.snoozeDuration);
     } else {
       await lockBrowser();
     }
@@ -234,27 +235,43 @@ async function setState(partial) {
   await chrome.storage.local.set({ state: { ...state, ...partial } });
 }
 
-async function isOnVideoCall() {
+async function getActiveCallDomain() {
   const { settings } = await chrome.storage.local.get('settings');
   const tabs = await chrome.tabs.query({});
-  return tabs.some(tab => {
+  for (const tab of tabs) {
     try {
       const hostname = new URL(tab.url).hostname;
-      // Match exact domain OR any subdomain (e.g. us06web.zoom.us matches zoom.us)
-      return settings.videoDomains.some(domain =>
+      const matched = settings.videoDomains.find(domain =>
         hostname === domain || hostname.endsWith('.' + domain)
       );
-    } catch { return false; }
-  });
+      if (matched) return matched;
+    } catch {}
+  }
+  return null;
+}
+
+async function notifyCallDelay(domain, retryMinutes) {
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  for (const tab of tabs) {
+    try {
+      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content/overlay.js'] });
+    } catch {}
+    try {
+      await chrome.tabs.sendMessage(tab.id, { action: 'SHOW_CALL_DELAY', domain, retryMinutes });
+    } catch {}
+  }
 }
 
 async function sendWarningNotification() {
-  chrome.notifications.create('break-warning', {
-    type: 'basic',
-    title: '// Break in 5 minutes',
-    message: 'Finish your current thought. The browser will lock in 5 minutes.',
-    priority: 1
-  });
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  for (const tab of tabs) {
+    try {
+      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content/overlay.js'] });
+    } catch {}
+    try {
+      await chrome.tabs.sendMessage(tab.id, { action: 'SHOW_WARNING' });
+    } catch {}
+  }
 }
 
 // ── History ───────────────────────────────────────────────────────────────────

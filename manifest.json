@@ -3,7 +3,7 @@
   "name": "Dev Break Enforcer",
   "version": "1.0.0",
   "description": "Forces developers to take 1-minute health breaks every hour. Locks the browser until you walk and drink water.",
-  "permissions": ["alarms", "storage", "tabs", "notifications", "scripting"],
+  "permissions": ["alarms", "storage", "tabs", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background/service-worker.js"
