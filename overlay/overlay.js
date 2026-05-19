@@ -15,11 +15,17 @@ chrome.runtime.sendMessage({ action: 'GET_STATE' }, (res) => {
   transitionToPhase(state, settings);
 });
 
-// When the SW broadcasts unlock, navigate standalone tabs away
+// Standalone tabs are extension pages — they receive chrome.runtime messages directly
+// (chrome.tabs.sendMessage only reaches content scripts, not extension pages)
 if (isStandaloneTab) {
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'UNLOCKED') {
       window.close();
+    }
+    if (msg.action === 'SYNC_STATE') {
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+      updateSnoozeButton(msg.state, msg.settings);
+      transitionToPhase(msg.state, msg.settings);
     }
   });
 }
@@ -80,8 +86,8 @@ function startCountdown(remaining, total) {
 }
 
 function finishTimer() {
-  chrome.runtime.sendMessage({ action: 'CONFIRM_BREAK' }, () => {});
-  // Transition locally to confirming while SW processes
+  // Tell SW the countdown is done — moves state to 'confirming', broadcasts to all tabs
+  sendMessage({ action: 'TIMER_COMPLETE' });
   showPhase('confirm');
   document.getElementById('status-label').textContent = 'Confirm you completed both tasks';
 }
@@ -89,12 +95,12 @@ function finishTimer() {
 // ── Button handlers ───────────────────────────────────────────────────────────
 
 document.getElementById('btn-start').addEventListener('click', async () => {
-  const res = await sendMessage({ action: 'GET_STATE' });
-  const duration = (res?.settings?.breakDuration ?? 1) * 60;
-  await sendMessage({ action: 'START_BREAK_TIMER' });
+  // Show timer phase immediately for responsiveness, then let SYNC_STATE start the countdown
+  // to avoid a double-start (click handler + SYNC_STATE both calling startCountdown)
   showPhase('timer');
-  startCountdown(duration, duration);
   document.getElementById('status-label').textContent = 'Break timer running…';
+  await sendMessage({ action: 'START_BREAK_TIMER' });
+  // SYNC_STATE broadcast from SW will start the countdown on this tab and all others
 });
 
 document.getElementById('btn-snooze').addEventListener('click', async () => {
@@ -138,6 +144,17 @@ function updateSnoozeButton(state, settings) {
     btn.textContent = `Snooze ${settings?.snoozeDuration ?? 10} min (${remaining} remaining)`;
   }
 }
+
+// ── Cross-tab sync ────────────────────────────────────────────────────────────
+
+// Receives state pushed from content script (via postMessage) when another tab changes phase
+window.addEventListener('message', (e) => {
+  if (e.data?.action !== 'SYNC_STATE') return;
+  const { state, settings } = e.data;
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  updateSnoozeButton(state, settings);
+  transitionToPhase(state, settings);
+});
 
 // ── Util ──────────────────────────────────────────────────────────────────────
 

@@ -19,8 +19,9 @@
   },
   "options_page": "options/options.html",
   "icons": {
-    "48": "assets/icons/icon48.svg",
-    "128": "assets/icons/icon128.svg"
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
   },
   "web_accessible_resources": [{
     "resources": ["overlay/overlay.html", "overlay/overlay.css", "overlay/overlay.js"],

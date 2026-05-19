@@ -6,50 +6,48 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <header>
-    <span class="brand">Dev Break Enforcer</span>
-    <span id="status-badge" class="badge working">working</span>
-  </header>
+  <div class="popup">
 
-  <div id="view-working" class="view">
-    <div class="next-break-row">
-      <span class="next-label">// next_break_in</span>
-      <span id="next-timer" class="next-timer">—:——</span>
+    <div class="popup-header">
+      <div class="header-left">
+        <span class="app-name">Break Enforcer</span>
+        <span id="status-badge" class="badge working">Active</span>
+      </div>
+      <a href="../options/options.html" target="_blank" class="icon-btn" title="Settings">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M7.5 9.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M12.2 7.5c0-.28.02-.55.07-.81l1.18-.68a.5.5 0 0 0 .18-.68l-1.2-2.08a.5.5 0 0 0-.68-.18l-1.1.64A5 5 0 0 0 9 3.07V1.8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5v1.27a5 5 0 0 0-1.67.62l-1.1-.64a.5.5 0 0 0-.68.18L1.35 5.33a.5.5 0 0 0 .18.68l1.18.68A5.1 5.1 0 0 0 2.64 7.5c0 .28-.02.55-.07.81l-1.18.68a.5.5 0 0 0-.18.68l1.2 2.08c.14.24.44.32.68.18l1.1-.64c.51.26 1.07.45 1.67.62v1.27c0 .28.22.5.5.5h2c.28 0 .5-.22.5-.5v-1.27a5 5 0 0 0 1.67-.62l1.1.64c.24.14.54.06.68-.18l1.2-2.08a.5.5 0 0 0-.18-.68l-1.18-.68c.05-.26.07-.53.07-.81Z" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </a>
     </div>
 
-    <div class="stats">
-      <div class="stat">
-        <div id="stat-completed" class="stat-val">—</div>
-        <div class="stat-lbl">completed</div>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div id="stat-snoozed" class="stat-val">—</div>
-        <div class="stat-lbl">snoozed</div>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div id="stat-streak" class="stat-val streak">—</div>
-        <div class="stat-lbl">streak</div>
+    <div class="timer-card">
+      <p class="timer-label">Next break in</p>
+      <div id="next-timer" class="timer-value">—:——</div>
+      <div class="timer-track">
+        <div id="timer-progress" class="timer-fill"></div>
       </div>
     </div>
 
-    <div class="actions">
-      <button id="btn-pause" class="btn-secondary">Pause</button>
-      <a href="../options/options.html" target="_blank" class="btn-secondary link-btn">Settings</a>
+    <div class="stats-row">
+      <div class="stat-item">
+        <span id="stat-completed" class="stat-num">—</span>
+        <span class="stat-desc">Completed</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span id="stat-snoozed" class="stat-num">—</span>
+        <span class="stat-desc">Snoozed</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span id="stat-streak" class="stat-num orange">—</span>
+        <span class="stat-desc">Day streak</span>
+      </div>
     </div>
-  </div>
 
-  <div id="view-locked" class="view" hidden>
-    <p class="locked-msg">// Browser is locked</p>
-    <p class="locked-sub">Complete your break tasks to unlock.</p>
-    <a href="../overlay/overlay.html" target="_blank" class="btn-primary link-btn">Open Break Screen</a>
-  </div>
+    <button id="btn-toggle-pause" class="btn-ghost">Pause session</button>
 
-  <div id="view-paused" class="view" hidden>
-    <p class="locked-msg">// Session paused</p>
-    <p class="locked-sub">Break timer is off until you resume.</p>
-    <button id="btn-resume" class="btn-primary">Resume Session</button>
   </div>
 
   <script src="popup.js"></script>

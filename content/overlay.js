@@ -24,6 +24,15 @@ function init() {
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'SHOW_OVERLAY') injectOverlay();
     if (msg.action === 'HIDE_OVERLAY') removeOverlay();
+    if (msg.action === 'SYNC_STATE') {
+      const iframe = document.querySelector('#__dbe_overlay__ iframe');
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage(
+          { action: 'SYNC_STATE', state: msg.state, settings: msg.settings },
+          '*'
+        );
+      }
+    }
   });
 }
 

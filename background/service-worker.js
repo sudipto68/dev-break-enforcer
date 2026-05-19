@@ -35,7 +35,10 @@ chrome.runtime.onStartup.addListener(async () => {
   await initStorage();
   const { state } = await chrome.storage.local.get('state');
   if (['locked', 'break_timer', 'confirming'].includes(state?.status)) {
-    await broadcastToTabs('SHOW_OVERLAY');
+    // Delay broadcast — on startup, tabs are still restoring and content scripts
+    // haven't loaded yet. The content scripts will self-check state on load anyway,
+    // but this broadcast catches any that miss the initial check.
+    setTimeout(() => broadcastToTabs('SHOW_OVERLAY'), 3000);
   }
 });
 
@@ -130,6 +133,21 @@ async function broadcastToTabs(action) {
   }
 }
 
+// Sends current state + settings to all overlay iframes so they stay in sync
+async function broadcastStateSync() {
+  const { state, settings } = await chrome.storage.local.get(['state', 'settings']);
+  // Send to content scripts (which forward via postMessage into iframes)
+  const tabs = await chrome.tabs.query({});
+  for (const tab of tabs) {
+    try {
+      await chrome.tabs.sendMessage(tab.id, { action: 'SYNC_STATE', state, settings });
+    } catch {}
+  }
+  // Also send via runtime broadcast for standalone overlay tabs (extension pages)
+  // which don't receive chrome.tabs.sendMessage
+  chrome.runtime.sendMessage({ action: 'SYNC_STATE', state, settings }).catch(() => {});
+}
+
 // Catch newly opened tabs while locked — redirect to overlay page directly
 // (content scripts can't run on chrome://newtab/, so we navigate instead)
 chrome.tabs.onCreated.addListener(async (tab) => {
@@ -164,6 +182,13 @@ async function handleMessage(msg) {
 
     case 'START_BREAK_TIMER': {
       await setState({ status: 'break_timer', breakStartedAt: Date.now() });
+      await broadcastStateSync();
+      return { ok: true };
+    }
+
+    case 'TIMER_COMPLETE': {
+      await setState({ status: 'confirming' });
+      await broadcastStateSync();
       return { ok: true };
     }
 
@@ -184,7 +209,7 @@ async function handleMessage(msg) {
       await chrome.alarms.clearAll();
       const nextBreakAt = Date.now() + settings.snoozeDuration * 60 * 1000;
       await setState({ nextBreakAt });
-      chrome.alarms.create('break', { delayInMinutes: settings.snoozeDuration });
+      await chrome.alarms.create('break', { delayInMinutes: settings.snoozeDuration });
       return { ok: true };
     }
 
@@ -226,7 +251,6 @@ async function isOnVideoCall() {
 async function sendWarningNotification() {
   chrome.notifications.create('break-warning', {
     type: 'basic',
-    iconUrl: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzIzODYzNiIvPjx0ZXh0IHg9IjI0IiB5PSIzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyOCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIj5CPC90ZXh0Pjwvc3ZnPg==',
     title: '// Break in 5 minutes',
     message: 'Finish your current thought. The browser will lock in 5 minutes.',
     priority: 1

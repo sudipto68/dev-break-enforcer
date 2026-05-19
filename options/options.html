@@ -8,95 +8,127 @@
 <body>
   <div class="page">
     <header>
-      <h1>Dev Break Enforcer</h1>
-      <p class="subtitle">// settings</p>
+      <div class="header-top">
+        <div>
+          <h1>Dev Break Enforcer</h1>
+          <p class="subtitle">Customize how your breaks are scheduled and enforced.</p>
+        </div>
+      </div>
     </header>
 
-    <div id="save-banner" class="save-banner" hidden>Settings saved.</div>
+    <div id="save-banner" class="save-banner" hidden>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3 3 6-6" stroke="#3fb950" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Settings saved successfully.
+    </div>
 
-    <section class="section">
-      <h2>Break Schedule</h2>
+    <div class="sections">
 
-      <div class="field">
-        <label for="work-interval">
-          Work interval
-          <span class="field-hint">How often to trigger a break</span>
-        </label>
-        <div class="slider-row">
+      <section class="section">
+        <div class="section-header">
+          <div class="section-icon">⏱</div>
+          <div>
+            <h2>Break Schedule</h2>
+            <p class="section-desc">How often breaks are triggered and how long they last.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-top">
+            <label for="work-interval">Work interval</label>
+            <span class="slider-val" id="work-interval-val">60 mins</span>
+          </div>
+          <p class="field-hint">Time between each break lock</p>
           <input type="range" id="work-interval" min="1" max="120" step="1" value="60" />
-          <span class="slider-val" id="work-interval-val">60 min</span>
         </div>
-      </div>
 
-      <div class="field">
-        <label for="break-duration">
-          Break timer duration
-          <span class="field-hint">Length of the countdown</span>
-        </label>
-        <div class="slider-row">
+        <div class="field">
+          <div class="field-top">
+            <label for="break-duration">Break countdown duration</label>
+            <span class="slider-val" id="break-duration-val">1 min</span>
+          </div>
+          <p class="field-hint">How long the break timer runs before checkboxes unlock</p>
           <input type="range" id="break-duration" min="1" max="5" step="1" value="1" />
-          <span class="slider-val" id="break-duration-val">1 min</span>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <h2>Snooze</h2>
+      <section class="section">
+        <div class="section-header">
+          <div class="section-icon">💤</div>
+          <div>
+            <h2>Snooze</h2>
+            <p class="section-desc">Allow a limited delay before the break is mandatory.</p>
+          </div>
+        </div>
 
-      <div class="field">
-        <label for="snooze-limit">
-          Snooze limit per session
-          <span class="field-hint">0 = no snooze allowed</span>
-        </label>
-        <div class="slider-row">
+        <div class="field">
+          <div class="field-top">
+            <label for="snooze-limit">Snooze limit per session</label>
+            <span class="slider-val" id="snooze-limit-val">1</span>
+          </div>
+          <p class="field-hint">Set to 0 to disable snoozing entirely</p>
           <input type="range" id="snooze-limit" min="0" max="3" step="1" value="1" />
-          <span class="slider-val" id="snooze-limit-val">1</span>
         </div>
-      </div>
 
-      <div class="field">
-        <label for="snooze-duration">
-          Snooze delay
-          <span class="field-hint">Minutes added per snooze</span>
-        </label>
-        <div class="slider-row">
+        <div class="field">
+          <div class="field-top">
+            <label for="snooze-duration">Snooze delay</label>
+            <span class="slider-val" id="snooze-duration-val">10 mins</span>
+          </div>
+          <p class="field-hint">Minutes added to the timer when you snooze</p>
           <input type="range" id="snooze-duration" min="5" max="30" step="5" value="10" />
-          <span class="slider-val" id="snooze-duration-val">10 min</span>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <h2>Notifications</h2>
-      <div class="field toggle-field">
-        <div>
-          <label>5-minute warning</label>
-          <p class="field-hint">Show a notification 5 minutes before the browser locks</p>
+      <section class="section">
+        <div class="section-header">
+          <div class="section-icon">🔔</div>
+          <div>
+            <h2>Notifications</h2>
+            <p class="section-desc">Get a heads-up before the browser locks.</p>
+          </div>
         </div>
-        <label class="toggle">
-          <input type="checkbox" id="warning-enabled" checked />
-          <span class="toggle-track"></span>
-        </label>
-      </div>
-    </section>
 
-    <section class="section">
-      <h2>Video Call Detection</h2>
-      <p class="section-desc">Break will be delayed if any of these domains are open in a tab.</p>
+        <div class="toggle-field">
+          <div>
+            <label class="toggle-label">5-minute warning</label>
+            <p class="field-hint">Show a Chrome notification before the browser locks</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="warning-enabled" checked />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </section>
 
-      <div id="domain-list" class="domain-list"></div>
+      <section class="section">
+        <div class="section-header">
+          <div class="section-icon">📹</div>
+          <div>
+            <h2>Video Call Detection</h2>
+            <p class="section-desc">Break is delayed if any of these domains are open in a tab.</p>
+          </div>
+        </div>
 
-      <div class="add-domain-row">
-        <input type="text" id="new-domain" placeholder="e.g. meet.example.com" />
-        <button id="btn-add-domain" class="btn-secondary">Add</button>
-      </div>
-    </section>
+        <div id="domain-list" class="domain-list"></div>
 
-    <section class="section danger-section">
-      <h2>Data</h2>
-      <button id="btn-reset-history" class="btn-danger">Reset Break History</button>
-      <span class="field-hint">Clears all historical data and streak.</span>
-    </section>
+        <div class="add-domain-row">
+          <input type="text" id="new-domain" placeholder="e.g. meet.example.com" autocomplete="off" />
+          <button id="btn-add-domain" class="btn-outline">Add domain</button>
+        </div>
+      </section>
+
+      <section class="section danger-section">
+        <div class="section-header">
+          <div class="section-icon">🗑</div>
+          <div>
+            <h2>Reset Data</h2>
+            <p class="section-desc">Permanently clear all break history and streak progress.</p>
+          </div>
+        </div>
+        <button id="btn-reset-history" class="btn-danger">Reset History</button>
+      </section>
+
+    </div>
 
     <div class="footer">
       <button id="btn-save" class="btn-primary">Save Settings</button>

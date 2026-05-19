@@ -41,7 +41,7 @@ function renderDomains() {
   for (const domain of currentDomains) {
     const tag = document.createElement('div');
     tag.className = 'domain-tag';
-    tag.innerHTML = `<span>${domain}</span><button data-domain="${domain}" title="Remove">✕</button>`;
+    tag.innerHTML = `<span class="domain-name">${domain}</span><button class="domain-remove" title="Remove">✕</button>`;
     tag.querySelector('button').addEventListener('click', () => {
       currentDomains = currentDomains.filter(d => d !== domain);
       renderDomains();
