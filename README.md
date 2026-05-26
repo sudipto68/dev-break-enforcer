@@ -37,7 +37,7 @@ If you're a developer who ignores every notification that isn't a prod alert, th
 
 ## Installation
 
-This extension is not on the Chrome Web Store. You install it directly from the code — takes about 2 minutes.
+This extension is not on the Chrome Web Store. You can install it directly from the code — it will take about 2 minutes.
 
 **Requirements:** Google Chrome or any Chromium-based browser (Edge, Brave, Arc)
 
