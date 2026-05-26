@@ -45,7 +45,7 @@ This extension is not on the Chrome Web Store. You can install it directly from 
 
 **Option A — with Git:**
 ```bash
-git clone https://github.com/your-username/break-enforcer.git
+git clone https://github.com/sudipto68/dev-break-enforcer.git
 ```
 
 **Option B — download ZIP:**
