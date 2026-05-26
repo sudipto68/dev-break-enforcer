@@ -33,13 +33,9 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.runtime.onStartup.addListener(async () => {
   await initStorage();
-  const { state } = await chrome.storage.local.get('state');
-  if (['locked', 'break_timer', 'confirming'].includes(state?.status)) {
-    // Delay broadcast — on startup, tabs are still restoring and content scripts
-    // haven't loaded yet. The content scripts will self-check state on load anyway,
-    // but this broadcast catches any that miss the initial check.
-    setTimeout(() => broadcastToTabs('SHOW_OVERLAY'), 3000);
-  }
+  // Always start fresh — don't carry a locked/break state over from a previous session
+  await setState({ status: 'working', snoozeUsed: 0, breakStartedAt: null, paused: false });
+  await scheduleNextBreak();
 });
 
 async function initStorage() {

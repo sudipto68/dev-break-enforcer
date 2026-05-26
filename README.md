@@ -25,7 +25,8 @@ If you're a developer who ignores every notification that isn't a prod alert, th
 - Locks all open tabs with a full-screen overlay after a configurable work interval (default 60 min)
 - New tabs opened during a break are also redirected to the break screen
 - 1-minute countdown timer — checkboxes only unlock when the timer hits zero
-- Detects active **Google Meet**, **Zoom**, **Teams**, and other video calls — delays the break automatically
+- Detects active **Google Meet**, **Zoom**, **Teams**, and other video calls — delays the break automatically and shows you why
+- **Pauses media automatically** — any playing video or audio (YouTube, Spotify, etc.) is paused when the overlay appears and resumes when you unlock
 - **Snooze** option (limited per session, configurable)
 - **5-minute warning** toast on your current tab before the lock kicks in
 - Tracks daily break history and a **streak** across sessions
@@ -74,12 +75,14 @@ The 60-minute timer starts immediately. No setup needed.
 
 1. Install the extension — the 60-minute work timer starts immediately
 2. Work as usual. The extension runs silently in the background
-3. At 5 minutes before the break, a Chrome notification appears as a heads-up
-4. When time is up, **all your tabs freeze** with the break screen
+3. At 5 minutes before the break, a warning toast appears on your current tab
+4. When time is up, **all your tabs freeze** with the break screen — any playing media is paused automatically
 5. Click **Start Break Timer** — a 1-minute countdown begins
 6. Step away from your screen, walk around, drink water
 7. Return, tick both checkboxes, click **Unlock Browser**
-8. The timer resets and your next break is scheduled
+8. The timer resets, media resumes, and your next break is scheduled
+
+**Every time you open Chrome**, the timer starts fresh. No leftover locked state from a previous session.
 
 ### Extension popup
 
@@ -225,3 +228,4 @@ A day counts toward the streak if it has at least one completed break and no mor
 - **`chrome://` pages** (like `chrome://extensions` itself) cannot be overlaid — Chrome blocks content script injection on internal pages
 - **The Chrome new tab page** cannot be overlaid by content scripts; new tabs are handled by redirecting them to `overlay/overlay.html` via `tabs.onCreated`
 - The extension cannot lock the browser at the **OS level** — a determined user can always close Chrome
+- **Media on other tabs** — only media on the tab that was active when the overlay appeared is paused; media playing in background tabs is not affected

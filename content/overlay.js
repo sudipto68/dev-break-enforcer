@@ -41,6 +41,14 @@ function init() {
 function injectOverlay() {
   if (document.getElementById('__dbe_overlay__')) return;
 
+  // Pause any playing media so audio/video doesn't continue behind the overlay
+  document.querySelectorAll('video, audio').forEach(media => {
+    if (!media.paused) {
+      media.pause();
+      media.dataset.dbePaused = 'true';
+    }
+  });
+
   const overlayEl = document.createElement('div');
   overlayEl.id = '__dbe_overlay__';
   Object.assign(overlayEl.style, {
@@ -76,6 +84,12 @@ function removeOverlay() {
   if (!el) return;
   el.remove();
   document.body.style.overflow = '';
+
+  // Resume any media we paused when the overlay appeared
+  document.querySelectorAll('video[data-dbe-paused], audio[data-dbe-paused]').forEach(media => {
+    delete media.dataset.dbePaused;
+    media.play().catch(() => {});
+  });
 }
 
 function showCallDelayToast(domain, retryMinutes) {
